@@ -1,0 +1,68 @@
+/* auth.css - 登录/注册专用 */
+body{
+    background:#f5efe6;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:100vh;
+    margin:0;
+    font-family:sans-serif;
+}
+.auth-container{
+    width:100%;
+    max-width:400px;
+    background:#fff;
+    border-radius:1rem;
+    box-shadow:0 10px 30px rgba(0,0,0,.1);
+    padding:2rem;
+}
+.auth-container .box{
+    display:none;
+    margin-right: 2rem;
+}
+.auth-container .box.active{
+    display:block;
+}
+.auth-container h1{
+    margin-bottom:1rem;
+    text-align:center;
+    color:#e86a33;
+}
+.auth-container input{
+    width:100%;
+    padding:1rem;
+    margin:1rem 0;
+    border:1px solid #f8dcbf;
+    border-radius:.5rem;
+}
+.auth-container button{
+    width:50%;
+    padding:.8rem;
+    background:#e86a33;
+    color:#fff;
+    border:none;
+    border-radius:.5rem;
+    font-size:1rem;
+    cursor:pointer;
+    transition:background .3s;
+    margin-left: 6rem;
+    margin-top: 1.5rem;
+}
+.auth-container button:hover{
+    background:#d45b28;
+}
+.auth-container p{
+    text-align:center;
+    margin-top:1rem;
+    font-size:1rem;
+}
+.auth-container a{
+    color:#e86a33;
+    text-decoration: none;
+}
+
+/* ===== 整体放大 1.2 倍 ===== */
+.auth-container{
+    transform: scale(1.2);        /* 整体放大 1.2 倍 */
+    transform-origin: center;     /* 以中心为基准 */
+}
