@@ -14,59 +14,27 @@ const resultMessage = document.getElementById("result-message");
 const restartButton = document.getElementById("restart-btn");
 const progressBar = document.getElementById("progress");
 
-//题目数组
-const quizQuestions = [
-  {
-    question: "What is the capital of France?",
-    answers: [
-      { text: "London", correct: false },
-      { text: "Berlin", correct: false },
-      { text: "Paris", correct: true },
-      { text: "Madrid", correct: false },
-    ],
-  },
-  {
-    question: "Which planet is known as the Red Planet?",
-    answers: [
-      { text: "Venus", correct: false },
-      { text: "Mars", correct: true },
-      { text: "Jupiter", correct: false },
-      { text: "Saturn", correct: false },
-    ],
-  },
-  {
-    question: "What is the largest ocean on Earth?",
-    answers: [
-      { text: "Atlantic Ocean", correct: false },
-      { text: "Indian Ocean", correct: false },
-      { text: "Arctic Ocean", correct: false },
-      { text: "Pacific Ocean", correct: true },
-    ],
-  },
-  {
-    question: "Which of these is NOT a programming language?",
-    answers: [
-      { text: "Java", correct: false },
-      { text: "Python", correct: false },
-      { text: "Banana", correct: true },
-      { text: "JavaScript", correct: false },
-    ],
-  },
-  {
-    question: "What is the chemical symbol for gold?",
-    answers: [
-      { text: "Go", correct: false },
-      { text: "Gd", correct: false },
-      { text: "Au", correct: true },
-      { text: "Ag", correct: false },
-    ],
-  },
-];
+// 原 quizQuestions 数组删除，改为后端拉取
+let quizQuestions = [], currentQuestionIndex = 0, score = 0, answersDisabled = false;
 
-// QUIZ STATE VARS
-let currentQuestionIndex = 0;
-let score = 0;
-let answersDisabled = false;
+// 页面加载完成即拉题
+window.addEventListener('DOMContentLoaded', () => {
+  fetch('http://localhost:8080/api/questions',{
+    headers:{'Authorization':'Bearer '+localStorage.getItem('jwt_token')}
+  }).then(r=>r.json())
+    .then(res=>{
+      if(res.code!==1) return alert('获取题目失败');
+      quizQuestions = res.data.map(q=>({
+        question: q.questionText,
+        answers: q.options.map((opt,idx)=>({text:opt, correct: idx===q.answerIndex}))
+      }));
+      totalQuestionsSpan.textContent = quizQuestions.length;
+      maxScoreSpan.textContent = quizQuestions.length;
+      // 原来逻辑继续
+      startButton.addEventListener("click", startQuiz);
+    });
+});
+
 
 totalQuestionsSpan.textContent = quizQuestions.length;
 maxScoreSpan.textContent = quizQuestions.length;
@@ -178,3 +146,9 @@ function restartQuiz() {
   resultScreen.classList.remove("active");
   startQuiz();
 }
+
+/* ---------- 退出登录 ---------- */
+document.getElementById('logoutBtn').addEventListener('click', () => {
+  localStorage.removeItem('jwt_token');
+  location.href = 'auth.html';   // 跳回登录页
+});
